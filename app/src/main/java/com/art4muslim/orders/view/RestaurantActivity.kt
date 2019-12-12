@@ -47,13 +47,12 @@ class RestaurantActivity : AppCompatActivity() {
                     response: Response<RestaurantResponse>
                 ) {
                     val res = response.body()
+                    pbProgress.visibility = View.GONE
                     if (res != null) {
                         if (res.status == 200)
                             initRestaurantList(res.data!!)
-                        else {
-                            pbProgress.visibility = View.GONE
+                        else
                             Toast.makeText(this@RestaurantActivity, res.message, Toast.LENGTH_SHORT).show()
-                        }
                     }
                 }
 

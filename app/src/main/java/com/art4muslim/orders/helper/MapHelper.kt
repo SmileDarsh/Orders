@@ -5,9 +5,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
-import android.location.LocationListener
 import android.location.LocationManager
-import android.os.Bundle
 import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -21,7 +19,11 @@ import com.google.android.gms.maps.model.*
  *  ->
  */
 
-class MapHelper(private val mActivity: Activity, private val mMap: GoogleMap, private val mCallback: OnLocationListener){
+class MapHelper(
+    private val mActivity: Activity,
+    private val mMap: GoogleMap,
+    private val mCallback: OnLocationListener
+) {
     private val REQUEST_PICKLOCATION: Int = View.generateViewId()
     private val mLocation = mutableListOf<Order>()
     private var mMyLocation: Location? = null
@@ -36,10 +38,10 @@ class MapHelper(private val mActivity: Activity, private val mMap: GoogleMap, pr
         getLocation()
     }
 
-    fun onDirectionEvent(location: String){
+    fun onDirectionEvent(location: String) {
         val latLng = location.split(',').map { it.toDouble() }
 
-        if(mPolyLine != null)
+        if (mPolyLine != null)
             mPolyLine!!.remove()
 
         mPolyLine = mMap.addPolyline(
@@ -51,26 +53,28 @@ class MapHelper(private val mActivity: Activity, private val mMap: GoogleMap, pr
     }
 
     fun addMarkers(location: MutableList<Order>) {
-        mLocation.addAll(location)
-        mLocation.forEach {
-            val latLng = it.location.split(',').map { location -> location.toDouble() }
-            it.marker = mMap.addMarker(
-                MarkerOptions().position(
-                    LatLng(
-                        latLng[0],
-                        latLng[1]
-                    )
-                ).title(it.userName)
-            )
+        if (mLocation.size == 0) {
+            mLocation.addAll(location)
+            location.forEach {
+                val latLng = it.location.split(',').map { location -> location.toDouble() }
+                it.marker = mMap.addMarker(
+                    MarkerOptions().position(
+                        LatLng(
+                            latLng[0],
+                            latLng[1]
+                        )
+                    ).title(it.userName)
+                )
+            }
+            showMyLocation()
         }
-        showMyLocation()
     }
 
-    fun getOrder(marker: Marker?): Order{
+    fun getOrder(marker: Marker?): Order {
         return mLocation.filter { it.marker == marker }[0]
     }
 
-    fun onRequestPermissions(requestCode: Int, grantResults: IntArray){
+    fun onRequestPermissions(requestCode: Int, grantResults: IntArray) {
         if (requestCode == REQUEST_PICKLOCATION) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED
             ) {
@@ -87,7 +91,8 @@ class MapHelper(private val mActivity: Activity, private val mMap: GoogleMap, pr
     }
 
     private fun getLocation() {
-        val lm: LocationManager = mActivity.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val lm: LocationManager =
+            mActivity.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         if (ActivityCompat.checkSelfPermission(
                 mActivity,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -104,23 +109,6 @@ class MapHelper(private val mActivity: Activity, private val mMap: GoogleMap, pr
         mMyLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER)
         if (mMyLocation != null)
             mCallback.onLocationBack()
-        val locationListener = object : LocationListener {
-            override fun onLocationChanged(location: Location?) {
-                mMyLocation = location
-                mCallback.onLocationBack()
-            }
-
-            override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
-            }
-
-            override fun onProviderEnabled(provider: String?) {
-            }
-
-            override fun onProviderDisabled(provider: String?) {
-            }
-
-        }
-        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000L, 10F, locationListener)
     }
 
     private fun showMyLocation() {
@@ -134,6 +122,6 @@ class MapHelper(private val mActivity: Activity, private val mMap: GoogleMap, pr
     }
 }
 
-interface OnLocationListener{
+interface OnLocationListener {
     fun onLocationBack()
 }
