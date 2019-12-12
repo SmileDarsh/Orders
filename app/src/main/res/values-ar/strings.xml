@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Orders</string>
+
+    <!-- Login Screen-->
+    <string name="phone_number">رقم الهاتف</string>
+    <string name="password">كلمة المرور</string>
+    <string name="login">تسجيل الدخول</string>
+    <string name="restaurant">مطاعم</string>
+    <string name="title_activity_order">الخريطة</string>
+
+    <!-- Order Screen-->
+    <string name="order_details">تفاصيل الطلب</string>
+    <string name="order_direction">الاتجاهات</string>
+    <string name="close">اغلاق</string>
+    <string name="order_name">الاسم : %1$s</string>
+    <string name="order_quantity">الكمية : %1$s</string>
+    <string name="order_price">السعر : %1$s جنيه</string>
+</resources>

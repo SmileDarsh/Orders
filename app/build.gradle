@@ -1,0 +1,50 @@
+apply plugin: 'com.android.application'
+
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
+
+android {
+    compileSdkVersion rootProject.ext.androidCompileSdkVersion
+    buildToolsVersion "29.0.2"
+    defaultConfig {
+        applicationId "com.art4muslim.orders"
+        minSdkVersion rootProject.ext.androidMinSdkVersion
+        targetSdkVersion rootProject.ext.androidTargetSdkVersion
+        versionCode 1
+        versionName "1.0"
+        multiDexEnabled true
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+def depend = rootProject.ext.projectDepend
+
+dependencies {
+    implementation depend.kotlinDep
+    implementation depend.coreKtx
+    implementation depend.multidex
+    implementation depend.appcomapt
+    implementation depend.designSupport
+    implementation depend.cardView
+    implementation depend.constraintLayour
+    implementation depend.glide
+
+    implementation depend.lifecycleRuntime
+    implementation depend.lifecycleExtensions
+    implementation depend.lifecycleReactivestreams
+
+    implementation depend.gsonGson
+    implementation depend.retrofit
+    implementation depend.convertergGson
+    implementation depend.okhttp
+    implementation depend.okhttpLogging
+
+    implementation depend.googleMap
+    implementation depend.eventBus
+}
