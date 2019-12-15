@@ -3,6 +3,7 @@ package com.art4muslim.orders.helper
 import android.Manifest
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
@@ -27,7 +28,6 @@ class MapHelper(
     private val REQUEST_PICKLOCATION: Int = View.generateViewId()
     private val mLocation = mutableListOf<Order>()
     private var mMyLocation: Location? = null
-    private var mPolyLine: Polyline? = null
 
     init {
         ActivityCompat.requestPermissions(
@@ -35,21 +35,13 @@ class MapHelper(
             arrayOf("android.permission.ACCESS_FINE_LOCATION"),
             REQUEST_PICKLOCATION
         )
-        getLocation()
     }
 
-    fun onDirectionEvent(location: String) {
+    fun onDirectionEvent(location: String): String{
         val latLng = location.split(',').map { it.toDouble() }
-
-        if (mPolyLine != null)
-            mPolyLine!!.remove()
-
-        mPolyLine = mMap.addPolyline(
-            PolylineOptions().add(
-                LatLng(mMyLocation!!.latitude, mMyLocation!!.longitude),
-                LatLng(latLng[0], latLng[1])
-            )
-        )
+        return "http://maps.google.com/maps?saddr=" +
+                "${mMyLocation!!.latitude},${mMyLocation!!.longitude}&daddr=" +
+                "${latLng[0]},${latLng[1]}"
     }
 
     fun addMarkers(location: MutableList<Order>) {

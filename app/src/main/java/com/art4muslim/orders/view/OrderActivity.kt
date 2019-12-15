@@ -1,5 +1,7 @@
 package com.art4muslim.orders.view
 
+import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.art4muslim.orders.R
@@ -55,7 +57,7 @@ class OrderActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarke
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onDirectionEvent(location: String) {
-        mMapHelper.onDirectionEvent(location)
+        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(mMapHelper.onDirectionEvent(location))))
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
